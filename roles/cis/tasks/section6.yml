@@ -1,0 +1,353 @@
+---
+
+  - name: 6.1.2 Ensure permissions on /etc/passwd are configured 
+    file: >
+      path=/etc/passwd
+      owner=root
+      group=root
+      mode=0644
+    tags:
+      - section6
+      - section6.1
+      - section6.1.2
+
+  - name: 6.1.3 Ensure permissions on /etc/shadow are configured 
+    file: >
+      path=/etc/shadow
+      owner=root
+      group=root
+      mode=0000
+    tags:
+      - section6
+      - section6.1
+      - section6.1.3
+
+  - name: 6.1.4 Ensure permissions on /etc/group are configured
+    file: >
+      path=/etc/group
+      owner=root
+      group=root
+      mode=0644
+    tags:
+      - section6
+      - section6.1
+      - section6.1.4
+ 
+  - name: 6.1.5 Ensure permissions on /etc/gshadow are configured
+    file: >
+      path=/etc/gshadow
+      owner=root
+      group=root
+      mode=0000
+    tags:
+      - section6
+      - section6.1
+      - section6.1.5
+
+  - name: 6.1.6 Ensure permissions on /etc/passwd- are configured
+    file: >
+      path=/etc/passwd-
+      owner=root
+      group=root
+      mode=0600
+    tags:
+      - section6
+      - section6.1
+      - section6.1.6
+
+  - name: 6.1.7 Ensure permissions on /etc/shadow- are configured
+    file: >
+      path=/etc/shadow-
+      owner=root
+      group=root
+      mode=0600
+    tags:
+      - section6
+      - section6.1
+      - section6.1.7
+
+  - name: 6.1.8 Ensure permissions on /etc/group- are configured
+    file: >
+      path=/etc/group-
+      owner=root
+      group=root
+      mode=0600 
+    tags:
+      - section6
+      - section6.1
+      - section6.1.8
+
+  - name: 6.1.9 Ensure permissions on /etc/gshadow- are configured 
+    file: >
+      path=/etc/gshadow-
+      owner=root
+      group=root
+      mode=0600
+    tags:
+      - section6
+      - section6.1
+      - section6.1.9
+
+  - name: 6.1.10 Ensure no world writable files exist
+    shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
+    register: result6_1_10
+    failed_when: result6_1_10.stdout != ""
+    changed_when: result6_1_10.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.1
+      - section6.1.10
+
+  - name: 6.1.11 Ensure no unowned files or directories exist
+    shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser
+    register: result6_1_11
+    failed_when: result6_1_11.stdout != ""
+    changed_when: result6_1_11.stdout != ""
+    always_run: yes   
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.1
+      - section6.1.11
+
+  - name: 6.1.12 Ensure no ungrouped files or directories exist
+    shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup
+    register: result6_1_12
+    failed_when: result6_1_12.stdout != ""
+    changed_when: result6_1_12.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.1
+      - section6.1.12
+
+  - name: 6.1.13 Audit SUID executables
+    shell:  df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000
+    register: result6_1_13
+    failed_when: result6_1_13.stdout != ""
+    changed_when: result6_1_13.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.1
+      - section6.1.13
+
+  - name: 6.1.14 Audit SGID executables
+    shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000
+    register: result6_1_14
+    failed_when: result6_1_14.stdout != ""
+    changed_when: result6_1_14.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.1
+      - section6.1.14
+
+  - name: 6.2.1 Ensure password fields are not empty
+    shell: cat /etc/shadow | awk -F':' '($2 == "" ) { print $1 " does not have a password "}'
+    register: result6_2_1
+    failed_when: result6_2_1.stdout != ""
+    changed_when: result6_2_1.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.1
+
+  - name: 6.2.2 Ensure no legacy "+" entries exist in /etc/passwd
+    shell: /bin/grep '^+:' /etc/passwd
+    register: result6_2_2
+    failed_when: result6_2_2.rc == 0
+    changed_when: result6_2_2.rc == 0
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.2
+
+  - name: 6.2.3 Ensure no legacy "+" entries exist in /etc/shadow 
+    shell: /bin/grep '^+:' /etc/shadow
+    register: result6_2_3
+    failed_when: result6_2_3.rc == 0
+    changed_when: result6_2_3.rc == 0
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.3
+
+  - name: 6.2.4 Ensure no legacy "+" entries exist in /etc/group
+    shell: /bin/grep '^+:' /etc/group
+    register: result6_2_4
+    failed_when: result6_2_4.rc == 0
+    changed_when: result6_2_4.rc == 0
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.4
+
+  - name: 6.2.5 Ensure root is the only UID 0 account
+    shell: cat /etc/passwd | awk -F':' '($3 == 0) { print $1 }'| grep -v 'root'
+    register: result6_2_5
+    failed_when: result6_2_5.stdout != ""
+    changed_when: result6_2_5.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.5
+
+  - name: 6.2.7 Ensure all users' home directories exist
+    shell: cat /etc/passwd | awk -F':' '{ print $1 " " $3 " " $6 }' | while read user uid dir; do if [ $uid -ge 1000 -a ! -d "$dir" -a $user != "nfsnobody" ]; then echo "The home directory ($dir) of user $user does not exist."; fi; done
+    register: result6_2_7
+    failed_when: result6_2_7.stdout != ""
+    changed_when: result6_2_7.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.7
+
+  - name: 6.2.8 Ensure users' home directories permissions are 750 or more restrictive
+    shell: for dir in `cat /etc/passwd  | egrep -v '(root|halt|sync|shutdown)' | awk -F':' '($7 !="/sbin/nologin") { print $6 }'`; do dirperm=`ls -ld $dir | cut -f1 -d" "`; if [ `echo $dirperm | cut -c6 ` != "-" ]; then echo "Group Write permission set on directory $dir"; fi; if [ `echo $dirperm | cut -c8 ` != "-" ]; then echo "Other Read permission set on directory $dir"; fi;  if [ `echo $dirperm | cut -c9 ` != "-" ]; then echo "Other Write permission set on directory $dir"; fi;  if [ `echo $dirperm | cut -c10 ` != "-" ]; then echo "Other Execute permission set on directory $dir"; fi; done
+    register: result6_2_8
+    failed_when: result6_2_8.stdout != ""
+    changed_when: result6_2_8.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.8
+
+  - name: 6.2.9 Ensure users own their home directories
+    shell: cat /etc/passwd | awk -F':' '{ print $1 " " $3 " " $6 }' | while read user uid dir; do if [ $uid -ge 1000 -a -d "$dir" -a $user != "nfsnobody" ]; then owner=$(stat -L -c "%U" "$dir"); if [ "$owner" != "$user" ]; then echo "The home directory ($dir) of user $user is owned by $owner."; fi; fi; done
+    register: result6_2_9
+    failed_when: result6_2_9.stdout != ""
+    changed_when: result6_2_9.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.9
+
+  - name: 6.2.10 Ensure users' dot files are not group or world writable
+    shell: for dir in `cat /etc/passwd | egrep -v '(root|sync|halt|shutdown)' | awk -F':' '($7 !="/sbin/nologin") { print $6 }'`; do for file in $dir/.[A-Za-z0-9]*; do if [ ! -h "$file" -a -f "$file" ]; then fileperm=`ls -ld $file | cut -f1 -d" "`; if [ `echo $fileperm | cut -c6 ` != "-" ]; then echo "Group Write permission set on file $file"; fi; if [ `echo $fileperm | cut -c9 ` != "-" ]; then echo "Other Write permission set on file $file"; fi; fi; done; done
+    register: result6_2_10
+    failed_when: result6_2_10.stdout != ""
+    changed_when: result6_2_10.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.10
+
+  - name: 6.2.11 Ensure no users have .forward files
+    shell: for dir in `cat /etc/passwd | awk -F':' '{ print $6 }'`; do if [ ! -h "$dir/.forward" -a -f "$dir/.forward" ]; then echo ".forward file $dir/.forward exists"; fi; done
+    register: result6_2_11
+    failed_when: result6_2_11.stdout != ""
+    changed_when: result6_2_11.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.11
+
+  - name: 6.2.12 Ensure no users have .netrc files
+    shell: for dir in `cat /etc/passwd | awk -F':' '{ print $6 }'`; do if [ ! -h "$dir/.netrc" -a -f "$dir/.netrc" ]; then echo ".netrc file $dir/.netrc exists"; fi; done
+    register: result6_2_12
+    failed_when: result6_2_12.stdout != ""
+    changed_when: result6_2_12.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.12
+
+  - name: 6.2.14 Ensure no users have .rhosts files
+    shell: for dir in `cat /etc/passwd | egrep -v '(root|halt|sync|shutdown)' | awk -F':' '($7 !="/sbin/nologin") { print $6 }'`; do for file in $dir/.rhosts; do if [ ! -h "$file" -a -f "$file" ]; then echo ".rhosts file in $dir";fi; done; done
+    register: result6_2_14
+    failed_when: result6_2_14.stdout != ""
+    changed_when: result6_2_14.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.14
+
+  - name: 6.2.15 Ensure all groups in /etc/passwd exist in /etc/group 
+    shell: for i in $(cut -s -d':' -f4 /etc/passwd | sort -u ); do grep -q -P "^.*?:[^:]*:$i:" /etc/group ; if [ $? -ne 0 ]; then echo "Group $i is referenced by /etc/passwd but does not exist in /etc/group"; fi; done
+    register: result6_2_15
+    failed_when: result6_2_15.stdout != ""
+    changed_when: result6_2_15.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.15
+
+  - name: 6.2.16 Ensure no duplicate UIDs exist
+    shell: cat /etc/passwd | cut -f3 -d":" | sort -n | uniq -c | while read x ; do [ -z "${x}" ] && break; set - $x; if [ $1 -gt 1 ]; then users=`awk -F':' '($3 == n) { print $1 }' n=$2 /etc/passwd | xargs`; echo "Duplicate UID ($2)= ${users}"; fi; done
+    register: result6_2_16
+    failed_when: result6_2_16.stdout != ""
+    changed_when: result6_2_16.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.16
+
+  - name: 6.2.17 Ensure no duplicate GIDs exist 
+    shell: cat /etc/group | cut -f3 -d":" | sort -n | uniq -c | while read x ; do [ -z "${x}" ] && break; set - $x; if [ $1 -gt 1 ]; then groups=`awk -F':' '($3 == n) { print $1 }' n=$2 /etc/group | xargs`; echo "Duplicate GID ($2)= ${groups}"; fi; done
+    register: result6_2_17
+    failed_when: result6_2_17.stdout != ""
+    changed_when: result6_2_17.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.17
+
+  - name: 6.2.18 Ensure no duplicate user names exist 
+    shell: cat /etc/passwd | cut -f1 -d":" | sort -n | uniq -c | while read x ; do [ -z "${x}" ] && break; set - $x; if [ $1 -gt 1 ]; then uids=`awk -F':' '($1 == n) { print $3 }' n=$2 /etc/passwd | xargs`; echo "Duplicate User Name ($2)= ${uids}"; fi; done
+    register: result6_2_18
+    failed_when: result6_2_18.stdout != ""
+    changed_when: result6_2_18.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.18
+
+  - name: 6.2.19 Ensure no duplicate group names exist
+    shell: cat /etc/group | cut -f1 -d":" | sort -n | uniq -c | while read x ; do [ -z "${x}" ] && break; set - $x; if [ $1 -gt 1 ]; then gids=`gawk -F':' '($1 == n) { print $3 }' n=$2 /etc/group | xargs`; echo "Duplicate Group Name ($2)= ${gids}";fi ;done
+    register: result6_2_19
+    failed_when: result6_2_19.stdout != ""
+    changed_when: result6_2_19.stdout != ""
+    always_run: yes
+    ignore_errors: yes
+    tags:
+      - section6
+      - section6.2
+      - section6.2.19

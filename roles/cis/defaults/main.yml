@@ -1,0 +1,18 @@
+# Should we configure AIDE on the system?
+# Options:
+#   yes: install and configure AIDE
+#   no: do not install or configure AIDE
+configure_aide: no
+
+# auditd defaults
+action_mail_acct: "root"
+admin_space_left_action: "halt"
+max_log_file: 100
+max_log_file_action: "keep_logs"
+space_left_action: "email"
+
+# rsyslog
+# Options:
+#   yes: configure rsyslog to receive remote logs from other servers
+#   no: do not configure rsyslog to receive remote logs from other servers
+rsyslog_host: no

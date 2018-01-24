@@ -1,0 +1,441 @@
+---
+
+  - name: Create /etc/modprobe.d/CIS.conf with root ownership & mode
+    file: path=/etc/modprobe.d/CIS.conf state=touch owner=root group=root mode=0600
+    tags:
+      - section1
+      - section1.1
+      - section1.1.1.1
+      - section1.1.1.2
+      - section1.1.1.3
+      - section1.1.1.4
+      - section1.1.1.5
+      - section1.1.1.6
+      - section1.1.1.7
+      - section1.1.1.8
+
+  - name: 1.1.1.1 Disable Mounting of cramfs Filesystems
+    lineinfile: >
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install cramfs /bin/true"
+    tags:
+      - section1
+      - section1.1
+      - section1.1.1.1
+
+  - name: 1.1.1.2 Disable Mounting of freevxfs Filesystems
+    lineinfile: >
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install freevxfs /bin/true"
+    tags:
+      - section1
+      - section1.1
+      - section1.1.1.2
+
+  - name: 1.1.1.3 Disable Mounting of jffs2 Filesystems
+    lineinfile: >
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install jffs2 /bin/true"
+    tags:
+      - section1
+      - section1.1
+      - section1.1.1.3
+
+  - name: 1.1.1.4 Disable Mounting of hfs Filesystems
+    lineinfile: >
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install hfs /bin/true"
+    tags:
+      - section1
+      - section1.1
+      - section1.1.1.4
+
+  - name: 1.1.1.5 Disable Mounting of hfsplus Filesystems
+    lineinfile: >
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install hfsplus /bin/true"
+    tags:
+      - section1
+      - section1.1
+      - section1.1.1.5
+
+  - name: 1.1.1.6 Disable Mounting of squashfs Filesystems
+    lineinfile: >
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install squashfs /bin/true"
+    tags:
+      - section1
+      - section1.1
+      - section1.1.1.6
+
+  - name: 1.1.1.7 Disable Mounting of udf Filesystems
+    lineinfile: >
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install udf /bin/true"
+    tags:
+      - section1
+      - section1.1
+      - section1.1.1.7
+
+  - name: 1.1.1.8 Disable Mounting of FAT Filesystems 
+    lineinfile: >
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install vfat /bin/true"
+    tags:
+      - section1
+      - section1.1
+      - section1.1.1.8
+
+  - name: 1.1.2 Create Separate Partition for /tmp
+    debug: msg="*** Manually create Separate Partition for /tmp."
+    tags:
+      - section1
+      - section1.1
+      - section1.1.2
+
+  - name: 1.1.3 - 1.1.5 Set nodev,nosuid,noexec option for /tmp Partition
+    mount: >
+      name="/tmp"
+      src={{ item.device }}
+      state=mounted
+      fstype={{ item.fstype }}
+      opts="defaults,nodev,nosuid,noexec"
+    when: item.mount == "/tmp"
+    with_items: '{{ ansible_mounts }}'
+    tags:
+      - section1
+      - section1.1
+      - section1.1.3
+      - section1.1.4
+      - section1.1.5
+
+  - name: 1.1.6 Create Separate Partition for /var
+    debug: msg="*** Manually create Separate Partition for /var."
+    tags:
+      - section1
+      - section1.1
+      - section1.1.6
+
+  - name: 1.1.7 Create Separate Partition for /var/tmp
+    debug: msg="*** Manually create Separate Partition for /var/tmp."
+    tags:
+      - section1
+      - section1.1
+      - section1.1.7
+
+  - name: 1.1.8 - 1.1.10 Set nodev,nosuid,noexec option for /var/tmp Partition
+    mount: >   
+      name="/var/tmp"
+      src={{ item.device }}
+      state=mounted
+      fstype={{ item.fstype }}
+      opts="defaults,nodev,nosuid,noexec"
+    when: item.mount == "/var/tmp"
+    with_items: '{{ ansible_mounts }}'
+    tags:
+      - section1
+      - section1.1  
+      - section1.1.8
+      - section1.1.9
+      - section1.1.10
+
+  - name: 1.1.11 Create Separate Partition for /var/log
+    debug: msg="*** Manually create Separate Partition for /var/log."
+    tags:
+      - section1
+      - section1.1
+      - section1.1.11
+
+  - name: 1.1.12 Create Separate Partition for /var/log/audit
+    debug: msg="*** Manually create Separate Partition for /var/log/audit."
+    tags:
+      - section1
+      - section1.1
+      - section1.1.12
+
+  - name: 1.1.13 Create Separate Partition for /home
+    debug: msg="*** Manually create Separate Partition for /home."
+    tags:
+      - section1
+      - section1.1
+      - section1.1.13
+
+  - name: 1.1.14 Add nodev Option to /home Partition
+    mount: >
+      name="/home"
+      src={{ item.device }}
+      state=mounted
+      fstype={{ item.fstype }}
+      opts="defaults,nodev"
+    when: item.mount == "/home"
+    with_items: '{{ ansible_mounts }}'
+    tags:
+      - section1
+      - section1.1
+      - section1.1.14
+
+  - name: 1.1.15 - 1.1.17 Add noexec Option to /dev/shm Partition
+    mount: >
+      name="/dev/shm"
+      src="none"
+      state=mounted
+      fstype="tmpfs"
+      opts="defaults,nodev,nosuid,noexec"
+    tags:
+      - section1
+      - section1.1
+      - section1.1.15
+      - section1.1.16
+      - section1.1.17
+
+  - name: 1.1.21 Set sticky bit on all world-writeable directories
+    shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null | xargs -r chmod a+t
+    tags:
+      - section1
+      - section1.1
+      - section1.1.21
+
+  - name: 1.1.22 Disable automounting
+    service: 
+      name=autofs
+      enabled=no
+      state=stopped
+    register: command_result
+    failed_when: "command_result|failed and 'could not find' not in command_result.msg"
+    tags:
+      - section1
+      - section1.1
+      - section1.1.22
+
+  - name: 1.2.2 Verify CentOS GPG key is installed
+    command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+    when: ansible_distribution == "CentOS"
+    tags:
+      - section1
+      - section1.2
+      - section1.2.2
+
+  - name: 1.2.3 Verify that gpgcheck is Globally Activated
+    lineinfile: >
+      state=present
+      dest=/etc/yum.conf
+      regexp="^#?gpgcheck=.*"
+      line=gpgcheck=1
+    tags:
+      - section1
+      - section1.2
+      - section1.2.3
+  
+  - name: 1.3.1 Install AIDE
+    yum: >
+      name=aide
+      state=present
+    when: configure_aide
+    tags:
+      - section1
+      - section1.3
+      - section1.3.1
+
+  - name: 1.3.1 Install AIDE (Initialize AIDE)
+    command: >
+      /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz' 
+      creates=/var/lib/aide/aide.db.gz
+    when: configure_aide
+    tags:
+      - section1
+      - section1.3
+      - section1.3.1
+
+  - name: 1.3.1 Install AIDE (check is prelink installed)
+    stat: path=/usr/sbin/prelink
+    register: prelink_stat
+    tags:
+      - section1
+      - section1.3
+      - section1.3.1
+
+  - name: 1.3.1 Install AIDE (Disable Prelinking)
+    lineinfile: >
+      state=present
+      dest=/etc/sysconfig/prelink
+      regexp="^#?PRELINKING=.*"
+      line=PRELINKING=no
+      create=yes
+    when:
+      - configure_aide
+      - prelink_stat.stat.exists
+    tags:
+      - section1
+      - section1.3
+      - section1.3.1
+
+  - name: 1.3.2 Implement Periodic Execution of File Integrity
+    cron: >
+      name="Run AIDE"
+      minute="0"
+      hour="5"
+      job="/usr/sbin/aide --check"
+    when: configure_aide
+    tags:
+      - section1
+      - section1.3
+      - section1.3.2
+
+  - name: 1.4.1 Set User/Group Owner on grub.conf
+    file: >
+      path=/boot/grub2/grub.cfg
+      owner=root
+      group=root
+    tags:
+      - section1
+      - section1.4
+      - section1.4.1
+
+  - name: 1.4.1 Set Permissions on grub.conf
+    file: >
+      path=/boot/grub2/grub.cfg
+      mode=0600
+    tags:
+      - section1
+      - section1.4
+      - section1.4.1
+
+  - name: 1.5.1 Restrict core dumps - via pam
+    lineinfile: >
+      dest=/etc/security/limits.conf
+      line="* hard core 0"
+      insertafter=EOF
+    tags:
+      - section1
+      - section1.5
+      - section1.5.1
+
+  - name: 1.5.1 Restrict core dumps - via sysctl
+    sysctl: >
+      name=fs.suid_dumpable
+      value=0
+      state=present
+      ignoreerrors=yes
+    tags:
+      - section1
+      - section1.5
+      - section1.5.1
+
+  - name: 1.5.3 Enable Randomized Virtual Memory Region Placement (Scored)
+    sysctl: >
+      name=kernel.randomize_va_space
+      value=2
+      state=present
+      ignoreerrors=yes
+    tags:
+      - section1
+      - section1.5
+      - section1.5.3
+
+  - name: 1.6.1.2 Set the SELinux State
+    yum: >
+      name=selinux-policy-targeted
+      state=present
+    tags:
+      - section1
+      - section1.6
+      - section1.6.1.2
+  
+  - name: 1.6.1.3 Set the SELinux Policy
+    selinux: >
+      state=enforcing
+      policy=targeted
+    ignore_errors: yes
+    tags:
+      - section1
+      - section1.6
+      - section1.6.1.3
+
+  - name: 1.6.1.4 Remove SETroubleshoot
+    yum: >
+      name=setroubleshoot
+      state=absent
+    tags:
+      - section1
+      - section1.6
+      - section1.6.1.4
+
+  - name: 1.6.1.5 Ensure the MCS Translation Service (mcstrans) is not installed
+    yum: >
+      name=mcstrans
+      state=absent  
+    tags:
+      - section1
+      - section1.6
+      - section1.6.1.5
+
+  - name: 1.6.2 Ensure SELinux is installed
+    yum: >
+      name=libselinux
+      state=present
+    tags:
+      - section1
+      - section1.6 
+      - section1.6.2
+
+  - name: 1.7.1.1 Ensure message of the day is configured properly
+    copy:
+      content=""
+      dest="/etc/motd"
+      force=yes
+    tags:
+      - section1
+      - section1.7
+      - section1.7.1.1
+
+  - name: 1.7.1.2 Ensure local login warning banner is configured properly 
+    copy:
+      src=files/issue
+      dest=/etc/issue
+    tags:
+      - section1
+      - section1.7
+      - section1.7.1.2
+
+  - name: 1.7.1.3 Ensure remote login warning banner is configured properly
+    copy:
+      src=files/issue.net
+      dest=/etc/issue.net
+    tags:
+      - section1
+      - section1.7
+      - section1.7.1.3
+
+  - name: 1.7.1.4 - 1.7.1.6 Ensure permission on motd, issue and issue.net
+    file: >
+      path=/etc/{{ item }}
+      owner=root
+      group=root
+      mode=0644
+    with_items:
+      - motd
+      - issue
+      - issue.net
+    tags:
+      - section1
+      - section1.7
+      - section1.7.1.4
+      - section1.7.1.5
+      - section1.7.1.6
+
+  - name: 1.8 Ensure updates, patches, and additional security software are installed
+    command: yum check-update
+    register: result
+    failed_when: "result.rc == 1"
+    when: ansible_distribution == "CentOS"
+    tags:
+      - section1
+      - section1.8

@@ -1,0 +1,453 @@
+---
+
+  - name: 3.1.1 Ensure IP forwarding is disabled
+    sysctl: >
+      name=net.ipv4.ip_forward
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.1
+      - section3.1.1
+
+  - name: 3.1.2 Ensure packet redirect sending is disabled 
+    sysctl: >
+      name=net.ipv4.conf.all.send_redirects
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.1
+      - section3.1.2
+
+  - name: 3.1.2 Ensure packet redirect sending is disabled
+    sysctl: >
+      name=net.ipv4.conf.default.send_redirects
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.1
+      - section3.1.2
+
+  - name: 3.2.1 Ensure source routed packets are not accepted 
+    sysctl: >
+      name=net.ipv4.conf.all.accept_source_route
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.1
+
+  - name: 3.2.1 Ensure source routed packets are not accepted 
+    sysctl: >
+      name=net.ipv4.conf.default.accept_source_route
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.1
+
+  - name: 3.2.2 Ensure ICMP redirects are not accepted
+    sysctl: >
+      name=net.ipv4.conf.all.accept_redirects
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.2
+
+  - name: 3.2.2 Ensure ICMP redirects are not accepted
+    sysctl: >
+      name=net.ipv4.conf.default.accept_redirects
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.2
+
+  - name: 3.2.3 Ensure secure ICMP redirects are not accepted
+    sysctl: >
+      name=net.ipv4.conf.all.secure_redirects
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.3
+
+  - name: 3.2.3 Ensure secure ICMP redirects are not accepted
+    sysctl: >
+      name=net.ipv4.conf.default.secure_redirects
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.3
+
+  - name: 3.2.4 Ensure suspicious packets are logged
+    sysctl: >
+      name=net.ipv4.conf.all.log_martians
+      value=1
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.4
+
+  - name: 3.2.4 Ensure suspicious packets are logged
+    sysctl: >
+      name=net.ipv4.conf.default.log_martians
+      value=1
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.4
+
+  - name: 3.2.5 Ensure broadcast ICMP requests are ignored 
+    sysctl: >
+      name=net.ipv4.icmp_echo_ignore_broadcasts
+      value=1
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.5
+
+  - name: 3.2.6 Ensure bogus ICMP responses are ignored 
+    sysctl: >
+      name=net.ipv4.icmp_ignore_bogus_error_responses
+      value=1
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.6
+
+  - name: 3.2.7 Ensure Reverse Path Filtering is enabled 
+    sysctl: >
+      name=net.ipv4.conf.all.rp_filter
+      value=1
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.7
+
+  - name: 3.2.7 Ensure Reverse Path Filtering is enabled 
+    sysctl: >
+      name=net.ipv4.conf.default.rp_filter
+      value=1
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.7
+
+  - name: 3.2.8 Ensure TCP SYN Cookies is enabled 
+    sysctl: >
+      name=net.ipv4.tcp_syncookies 
+      value=1
+      state=present
+    tags:
+      - section3
+      - section3.2
+      - section3.2.8
+
+  - name: 3.3.1 Ensure IPv6 router advertisements are not accepted 
+    sysctl: >
+      name=net.ipv6.conf.all.accept_ra
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.3
+      - section3.3.1
+
+  - name: 3.3.1 Ensure IPv6 router advertisements are not accepted
+    sysctl: >
+      name=net.ipv6.conf.default.accept_ra
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.3
+      - section3.3.1
+
+  - name: 3.3.2 Ensure IPv6 redirects are not accepted 
+    sysctl: >
+      name=net.ipv6.conf.all.accept_redirects
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.3
+      - section3.3.2
+
+  - name: 3.3.2 Ensure IPv6 redirects are not accepted 
+    sysctl: >
+      name=net.ipv6.conf.default.accept_redirects
+      value=0
+      state=present
+    tags:
+      - section3
+      - section3.3
+      - section3.3.2
+
+  - name: 3.3.3 Ensure IPv6 is disabled
+    lineinfile: >
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="options ipv6 disable=1"
+    tags:
+      - section3
+      - section3.3
+      - section3.3.3
+
+  - name: 3.4.1 Ensure TCP Wrappers is installed 
+    yum: >
+      pkg=tcp_wrappers
+      state=installed
+    tags:
+      - section3
+      - section3.4
+      - section3.4.1
+
+  - name: 3.4.2 Ensure /etc/hosts.allow is configured
+    lineinfile: >
+      state=present
+      create=yes
+      dest=/etc/hosts.allow
+      regexp=^ALL
+      line=ALL:{{ tcp_allow | default("ALL") }}
+    tags:
+      - section3
+      - section3.4
+      - section3.4.2
+
+  - name: 3.4.3 Ensure /etc/hosts.deny is configured
+    lineinfile: >   
+      state=present
+      create=yes   
+      dest=/etc/hosts.deny
+      line=ALL:ALL  
+    tags:
+      - section3
+      - section3.4
+      - section3.4.3
+
+  - name: 3.4.4 Ensure permissions on /etc/hosts.allow are configured 
+    file: >
+      path=/etc/hosts.deny
+      owner=root
+      group=root
+      mode=0644
+    tags:
+      - section3
+      - section3.4
+      - section3.4.4
+
+  - name: 3.4.5 Ensure permissions on /etc/hosts.deny are 644
+    file: >
+      path=/etc/hosts.deny
+      owner=root 
+      group=root
+      mode=0644 
+    tags:
+      - section3
+      - section3.4
+      - section3.4.5
+
+  - name: 3.5.1 Ensure DCCP is disabled 
+    lineinfile: >
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install dccp /bin/true"
+    tags:
+      - section3
+      - section3.5
+      - section3.5.1
+
+  - name: 3.5.2 Ensure SCTP is disabled 
+    lineinfile: >   
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install sctp /bin/true"
+    tags:
+      - section3
+      - section3.5
+      - section3.5.2
+
+  - name: 3.5.3 Ensure RDS is disabled
+    lineinfile: >
+      state=present 
+      dest=/etc/modprobe.d/CIS.conf
+      line="install rds /bin/true"
+    tags:
+      - section3
+      - section3.5
+      - section3.5.3
+
+  - name: 3.5.4 Ensure TIPC is disabled 
+    lineinfile: >   
+      state=present
+      dest=/etc/modprobe.d/CIS.conf
+      line="install tipc /bin/true"
+    tags:
+      - section3
+      - section3.5
+      - section3.5.4
+
+  - name: 3.5.4 Ensure TIPC is disabled 
+    lineinfile: >
+      state=present 
+      dest=/etc/modprobe.d/CIS.conf
+      line="install tipc /bin/true"
+    tags:
+      - section3
+      - section3.5
+      - section3.5.4
+
+  - name: 3.6.1 Ensure iptables is installed
+    yum: >
+      pkg=iptables
+      state=installed
+    tags:
+      - section3
+      - section3.6
+      - section3.6.1
+
+  - name: 3.6.3 Ensure loopback traffic is configured 
+    iptables: 
+      chain=INPUT
+      in_interface=lo
+      jump=ACCEPT
+    tags:
+      - section3
+      - section3.6
+      - section3.6.3
+
+  - name: 3.6.3 Ensure loopback traffic is configured 
+    iptables:    
+      chain=OUTPUT
+      out_interface=lo
+      jump=ACCEPT
+    tags:
+      - section3
+      - section3.6
+      - section3.6.3
+
+  - name: 3.6.3 Ensure loopback traffic is configured 
+    iptables:    
+      chain=INPUT
+      source=127.0.0.0/8
+      jump=DROP
+    tags:
+      - section3
+      - section3.6
+      - section3.6.3
+
+  - name: 3.6.4 Ensure outbound and established connections are configured
+    iptables:
+      chain=OUTPUT
+      protocol=tcp
+      ctstate=NEW,ESTABLISHED
+      jump=ACCEPT
+    tags:
+      - section3
+      - section3.6
+      - section3.6.4
+
+  - name: 3.6.4 Ensure outbound and established connections are configured
+    iptables:
+      chain=OUTPUT
+      protocol=udp
+      ctstate=NEW,ESTABLISHED
+      jump=ACCEPT
+    tags:
+      - section3
+      - section3.6
+      - section3.6.4
+
+  - name: 3.6.4 Ensure outbound and established connections are configured
+    iptables:
+      chain=OUTPUT
+      protocol=icmp
+      ctstate=NEW,ESTABLISHED
+      jump=ACCEPT
+    tags:
+      - section3
+      - section3.6
+      - section3.6.4
+
+  - name: 3.6.4 Ensure outbound and established connections are configured
+    iptables:
+      chain=INPUT
+      protocol=tcp
+      ctstate=NEW,ESTABLISHED
+      jump=ACCEPT
+    tags:
+      - section3
+      - section3.6
+      - section3.6.4
+
+  - name: 3.6.4 Ensure outbound and established connections are configured
+    iptables:
+      chain=INPUT
+      protocol=udp
+      ctstate=NEW,ESTABLISHED
+      jump=ACCEPT
+    tags:
+      - section3
+      - section3.6
+      - section3.6.4
+
+  - name: 3.6.4 Ensure outbound and established connections are configured
+    iptables:
+      chain=INPUT
+      protocol=icmp
+      ctstate=NEW,ESTABLISHED
+      jump=ACCEPT
+    tags:
+      - section3
+      - section3.6
+      - section3.6.4
+
+  - name: 3.6.5 Ensure firewall rules exist for all open ports
+    iptables:
+      chain=INPUT
+      protocol=tcp
+      destination_port=22
+      ctstate=NEW
+      jump=ACCEPT   
+    tags:
+      - section3
+      - section3.6 
+      - section3.6.5
+
+  - name: 3.6.2 Ensure default deny firewall policy
+    command: /sbin/iptables -P INPUT DROP
+    tags:
+      - section3
+      - section3.6
+      - section3.6.2
+
+  - name: 3.6.2 Ensure default deny firewall policy
+    command: /sbin/iptables -P FORWARD DROP
+    tags:
+      - section3
+      - section3.6
+      - section3.6.2
+
+  - name: 3.6.2 Ensure default deny firewall policy
+    command: /sbin/iptables -P OUTPUT DROP
+    tags:
+      - section3
+      - section3.6
+      - section3.6.2
